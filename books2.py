@@ -26,7 +26,7 @@ class BookRequest(BaseModel):
     author: str = Field(min_length=1)
     description: str = Field(min_length=1, max_length=100)
     rating: int = Field(gt=0, lt=6)
-    published_date: int = Field(gt=-1, lt=3000)
+    published_date: int = Field(gt=-1, lt=2031)
 
     model_config = {
         "json_schema_extra": {
@@ -44,9 +44,9 @@ BOOKS = [
     Book(1, 'Computer Science Pro', 'codingwithroby', 'A very nice book!', 5, 2012),
     Book(2, 'Be Fast with FastAPI', 'codingwithroby', 'A great book!', 5, 2015),
     Book(3, 'Master Endpoints', 'codingwithroby', 'A awesome book!', 5, 2020),
-    Book(4, 'HP1', 'Author 1', 'Book Description', 2, 2021),
+    Book(4, 'HP1', 'Author 1', 'Book Description', 2, 2030),
     Book(5, 'HP2', 'Author 2', 'Book Description', 3, 2010),
-    Book(6, 'HP3', 'Author 3', 'Book Description', 1, 2000)
+    Book(6, 'HP3', 'Author 3', 'Book Description', 1, 2030)
 ]
 
 @app.get("/books")
@@ -65,6 +65,14 @@ async def read_book_by_rating(book_rating: int):
     books_to_return = []
     for book in BOOKS:
         if book.rating == book_rating:
+            books_to_return.append(book)
+    return books_to_return
+
+@app.get("/books/publish/")
+async def read_book_by_published_date(published_date: int):
+    books_to_return = []
+    for book in BOOKS:
+        if book.published_date == published_date:
             books_to_return.append(book)
     return books_to_return
 
