@@ -70,6 +70,20 @@ async def create_book(book_request: BookRequest):
     print(type(new_book))
     BOOKS.append(find_book_id(new_book))
 
+@app.put("/update_book")
+async def update_book(book: BookRequest):
+    for i in range(len(BOOKS)):
+        if BOOKS[i].id == book.id:
+            BOOKS[i] = book
+
+@app.delete("/delete/{book_id}")
+async def delete_book(book_id: int):
+    for i in range(len(BOOKS)):
+        if BOOKS[i].id == book_id:
+            BOOKS.pop(i)
+            break
+
+
 def find_book_id(book: Book):
     book.id = BOOKS[-1].id + 1 if len(BOOKS) > 0 else 1
     return book
